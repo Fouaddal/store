@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'HomeScreen.dart'; // Import HomeScreen
+import 'HomeScreen.dart';
+import 'SignUp.dart';
 
 class SignInScreen extends StatefulWidget {
   @override
@@ -46,6 +47,7 @@ class _SignInScreenState extends State<SignInScreen> {
     }
   }
 
+
   Future<void> verifyOtp() async {
     try {
       final response = await http.post(
@@ -80,18 +82,39 @@ class _SignInScreenState extends State<SignInScreen> {
       );
     }
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text('Sign In'),
+        backgroundColor: Colors.blue,
+        centerTitle: true,
+        title: Text(
+          'Welcome Back',
+          style: TextStyle(
+            color: Colors.white,
+            fontFamily: 'Merriweather' ,
+            fontSize: 30,
+          ) ,
+        ),
       ),
-      body: Padding(
+      body:  Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            Image.asset(
+              'images/730_generated.jpg',
+              height: 200,
+            ),
+            Text(
+              'Sign In to your account',
+              style: TextStyle(
+                fontFamily: 'Merriweather',
+                fontSize: 15,
+              ),
+            ),
+            SizedBox(height: 20.0,),
             TextField(
               onChanged: (value) {
                 setState(() {
@@ -100,7 +123,18 @@ class _SignInScreenState extends State<SignInScreen> {
               },
               decoration: InputDecoration(
                 hintText: 'Phone Number',
+                hintStyle: TextStyle(
+                  color: Colors.black,
+                  fontFamily: 'Merriweather' ,
+                  fontSize: 20,
+                ),
+                prefixIcon: Icon(Icons.phone,color: Colors.blue),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+
+                ),
               ),
+
               keyboardType: TextInputType.phone,
             ),
             SizedBox(height: 16.0),
@@ -113,17 +147,56 @@ class _SignInScreenState extends State<SignInScreen> {
                 },
                 decoration: InputDecoration(
                   hintText: 'OTP',
+                  hintStyle: TextStyle(
+                    color: Colors.black,
+                    fontFamily: 'Merriweather' ,
+                    fontSize: 20,
+                  ),
+                  prefixIcon: Icon(
+                    Icons.lock,
+                  color: Colors.blue,
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
                 ),
+
                 keyboardType: TextInputType.number,
               ),
             SizedBox(height: 16.0),
             ElevatedButton(
               onPressed: codeSent ? verifyOtp : sendSms,
-              child: Text(codeSent ? 'Verify OTP' : 'Send SMS'),
+              child: Text(codeSent ? 'Verify OTP  ' : 'Send SMS'),
+              style: ElevatedButton.styleFrom(
+                foregroundColor: Colors.white,
+                backgroundColor: Colors.blue,
+                textStyle: TextStyle(
+                  fontFamily: 'Merriweather',
+                  fontSize: 18,
+                ),
+              ),
             ),
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text('Don\'t have an account?'),
+                TextButton(
+                  onPressed: (){
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context)=>SignUpScreen()),
+                    );
+                  },
+                  child: Text('Sing Up') ,
+                )
+              ],
+            ),
+
           ],
         ),
       ),
     );
+
   }
 }

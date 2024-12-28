@@ -34,7 +34,7 @@ class ProductDetailsScreen extends StatelessWidget {
                   SizedBox(height: 10),
                   Text(
                     'ID: ${product['id']}',
-                    style: TextStyle(fontSize: 16, color: Colors.grey),
+                    style: TextStyle(fontSize: 16, color: Colors.white),
                   ),
                   SizedBox(height: 10),
                   Text(

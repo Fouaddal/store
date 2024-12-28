@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'User.dart';
-import 'HomeScreen.dart';
 
 class AccountScreen extends StatefulWidget {
   final Map<String, dynamic>? user;
@@ -47,24 +46,29 @@ class _AccountScreenState extends State<AccountScreen> {
     );
 
     final uri = Uri.parse('http://10.0.2.2:8000/api/users');
-    final response = await http.post(
-      uri,
-      headers: {'Content-Type': 'application/json'},
-      body: json.encode({'users': [user.toJson()]}),
-    );
 
-    if (response.statusCode == 201) {
-      print('Data uploaded successfully: ${response.body}');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('User data saved successfully')),
+    try {
+      final response = await http.post(
+        uri,
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode({'users': [user.toJson()]}),
       );
-      setState(() {
-        _isEditing = false;  // Switch to view mode
-      });
-    } else {
-      print('Failed to upload data: ${response.body}');
+
+      if (response.statusCode == 201) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('User data saved successfully')),
+        );
+        setState(() {
+          _isEditing = false;  // Switch to view mode
+        });
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to save user data: ${response.statusCode}')),
+        );
+      }
+    } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to save user data')),
+        SnackBar(content: Text('Error saving data: $e')),
       );
     }
   }
@@ -78,8 +82,8 @@ class _AccountScreenState extends State<AccountScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text('Account Screen'),
         actions: [
           if (!_isEditing)
             IconButton(
@@ -88,72 +92,86 @@ class _AccountScreenState extends State<AccountScreen> {
             ),
         ],
       ),
-      body: SingleChildScrollView(
+      body: ListView(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: 16.0),
-            if (widget.user?['phone_number'] != null)
+        children: <Widget>[
+          SizedBox(height: 16.0),
+          if (widget.user?['phone_number'] != null)
+            Text(
+              'Phone Number: ${widget.user!['phone_number']}',
+              style: TextStyle(fontSize: 20),
+            ),
+          SizedBox(height: 16.0),
+          _isEditing
+              ? Column(
+            children: [
+              TextField(
+                controller: _firstNameController,
+                decoration: InputDecoration(
+                  prefixIcon: Icon(Icons.person),
+                  labelText: 'First Name',
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                  ),
+                ),
+              ),
+              SizedBox(height: 16.0),
+              TextField(
+                controller: _lastNameController,
+                decoration: InputDecoration(
+                  prefixIcon: Icon(Icons.tag),
+                  labelText: 'Last Name',
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                  ),
+                ),
+              ),
+              SizedBox(height: 16.0),
+              TextField(
+                controller: _emailController,
+                decoration: InputDecoration(
+                  prefixIcon: Icon(Icons.email),
+                  labelText: 'Email',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0)
+                  ),
+                ),
+              ),
+              SizedBox(height: 16.0),
+              ElevatedButton(
+                onPressed: _uploadData,
+                child: Text('Save'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blue,
+                  foregroundColor: Colors.white,
+                  textStyle: TextStyle(
+                    fontFamily: 'Merriweather',
+                    fontSize: 18,
+                  ),
+                ),
+              ),
+            ],
+          )
+              : Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
               Text(
-                'Phone Number: ${widget.user!['phone_number']}',
+                'First Name: ${_firstNameController.text}',
                 style: TextStyle(fontSize: 20),
               ),
-            SizedBox(height: 16.0),
-            _isEditing
-                ? Column(
-              children: [
-                TextField(
-                  controller: _firstNameController,
-                  decoration: InputDecoration(
-                    labelText: 'First Name',
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-                SizedBox(height: 16.0),
-                TextField(
-                  controller: _lastNameController,
-                  decoration: InputDecoration(
-                    labelText: 'Last Name',
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-                SizedBox(height: 16.0),
-                TextField(
-                  controller: _emailController,
-                  decoration: InputDecoration(
-                    labelText: 'Email',
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-                SizedBox(height: 16.0),
-                ElevatedButton(
-                  onPressed: _uploadData,
-                  child: Text('Save'),
-                ),
-              ],
-            )
-                : Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'First Name: ${_firstNameController.text}',
-                  style: TextStyle(fontSize: 20),
-                ),
-                SizedBox(height: 16.0),
-                Text(
-                  'Last Name: ${_lastNameController.text}',
-                  style: TextStyle(fontSize: 20),
-                ),
-                SizedBox(height: 16.0),
-                Text(
-                  'Email: ${_emailController.text}',
-                  style: TextStyle(fontSize: 20),
-                ),
-              ],
-            ),
-          ],
-        ),
+              SizedBox(height: 16.0),
+              Text(
+                'Last Name: ${_lastNameController.text}',
+                style: TextStyle(fontSize: 20),
+              ),
+              SizedBox(height: 16.0),
+              Text(
+                'Email: ${_emailController.text}',
+                style: TextStyle(fontSize: 20),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

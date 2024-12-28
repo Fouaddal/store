@@ -11,7 +11,8 @@ String formatImageUrl(String relativeUrl) {
 
 class HomeScreen extends StatefulWidget {
   final Function(CartItem) addToCart;
-  final String phoneNumber;  // Added to accept phoneNumber
+  final String phoneNumber;// Added to accept phoneNumber
+
 
   HomeScreen({required this.addToCart, required this.phoneNumber});
 
@@ -48,13 +49,18 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
     switch (_selectedIndex) {
       case 0:
         return AppBar(
+          backgroundColor: Colors.blue,
           title: TextField(
             decoration: InputDecoration(
               hintText: 'Search...',
               border: InputBorder.none,
-              hintStyle: TextStyle(color: Colors.black12),
+              hintStyle: TextStyle(
+                color: Colors.white,
+                fontFamily: 'Merriweather',
+              ),
             ),
-            style: TextStyle(color: Colors.black, fontSize: 18),
+
+            style: TextStyle(color: Colors.white, fontSize: 20),
             onChanged: (query) {
               setState(() {
                 _searchQuery = query;
@@ -63,6 +69,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
           ),
           bottom: TabBar(
             controller: _tabController,
+            indicatorColor: Colors.white,
             tabs: [
               Tab(text: 'Products'),
               Tab(text: 'Stores'),
@@ -71,12 +78,25 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
         );
       case 1:
         return AppBar(
-          title: Text('Cart'),
+          backgroundColor: Colors.blue,
+          title: Text(
+              'Cart',
+          style: TextStyle(
+            color: Colors.white,
+            fontFamily: 'Merriweather',
+          ),
+    ),
         );
       case 2:
       default:
         return AppBar(
-          title: Text('Account'),
+          backgroundColor: Colors.blue,
+          title: Text('Account',
+            style: TextStyle(
+                color: Colors.white,
+                fontFamily: 'Merriweather',
+            ),
+          ),
         );
     }
   }
@@ -84,11 +104,13 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: _getAppBar(),
       body: IndexedStack(
         index: _selectedIndex,
         children: [
-          HomeScreenTab(addToCart: widget.addToCart, searchQuery: _searchQuery),
+          HomeScreenTab(
+              addToCart: widget.addToCart, searchQuery: _searchQuery),
           CartScreen(
             cartItems: cartItems,
             onRemoveItem: (item) {
@@ -97,7 +119,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
               });
             },
             onFinish: () {
-              // Implement finish purchase functionality
+
             },
           ),
           AccountScreen(user: {
@@ -124,7 +146,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.amber[800],
+        selectedItemColor: Colors.blue,
         onTap: _onItemTapped,
       ),
     );
