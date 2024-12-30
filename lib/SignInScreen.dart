@@ -65,7 +65,7 @@ class _SignInScreenState extends State<SignInScreen> {
           context,
           MaterialPageRoute(
             builder: (context) => HomeScreen(
-              phoneNumber: phoneNumber, addToCart: (CartItem ) {  },
+              phoneNumber: phoneNumber, addToCart: (CartItem ) {  }, user: {},
             ),
           ),
         );

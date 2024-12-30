@@ -11,10 +11,12 @@ String formatImageUrl(String relativeUrl) {
 
 class HomeScreen extends StatefulWidget {
   final Function(CartItem) addToCart;
-  final String phoneNumber;// Added to accept phoneNumber
+  final Map<String, dynamic> user; // User data passed from SignUpScreen
 
-
-  HomeScreen({required this.addToCart, required this.phoneNumber});
+  HomeScreen({
+    required this.addToCart,
+    required this.user, required String phoneNumber,
+  });
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -59,7 +61,6 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                 fontFamily: 'Merriweather',
               ),
             ),
-
             style: TextStyle(color: Colors.white, fontSize: 20),
             onChanged: (query) {
               setState(() {
@@ -80,21 +81,22 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
         return AppBar(
           backgroundColor: Colors.blue,
           title: Text(
-              'Cart',
-          style: TextStyle(
-            color: Colors.white,
-            fontFamily: 'Merriweather',
+            'Cart',
+            style: TextStyle(
+              color: Colors.white,
+              fontFamily: 'Merriweather',
+            ),
           ),
-    ),
         );
       case 2:
       default:
         return AppBar(
           backgroundColor: Colors.blue,
-          title: Text('Account',
+          title: Text(
+            'Account',
             style: TextStyle(
-                color: Colors.white,
-                fontFamily: 'Merriweather',
+              color: Colors.white,
+              fontFamily: 'Merriweather',
             ),
           ),
         );
@@ -110,7 +112,9 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
         index: _selectedIndex,
         children: [
           HomeScreenTab(
-              addToCart: widget.addToCart, searchQuery: _searchQuery),
+            addToCart: widget.addToCart,
+            searchQuery: _searchQuery,
+          ),
           CartScreen(
             cartItems: cartItems,
             onRemoveItem: (item) {
@@ -118,31 +122,26 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                 cartItems.remove(item);
               });
             },
-            onFinish: () {
-
-            },
+            onFinish: () {},
           ),
-          AccountScreen(user: {
-            'phone_number': widget.phoneNumber,
-            'first_name': '',
-            'last_name': '',
-            'email': '',
-          }),
+          AccountScreen(
+            user: widget.user, // Pass the user data to AccountScreen
+          ),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
-            label: 'Home', // Updated with non-null label
+            label: 'Home',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.shopping_cart),
-            label: 'Cart', // Updated with non-null label
+            label: 'Cart',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.account_circle),
-            label: 'Account', // Updated with non-null label
+            label: 'Account',
           ),
         ],
         currentIndex: _selectedIndex,
@@ -157,7 +156,10 @@ class HomeScreenTab extends StatelessWidget {
   final Function(CartItem) addToCart;
   final String searchQuery;
 
-  HomeScreenTab({required this.addToCart, required this.searchQuery});
+  HomeScreenTab({
+    required this.addToCart,
+    required this.searchQuery,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -203,9 +205,9 @@ class HomeScreenTab extends StatelessWidget {
                         borderRadius: BorderRadius.vertical(top: Radius.circular(15.0)),
                         child: Image.network(
                           formatImageUrl(products[i]['productImage']),
-                          height: 150, // Increased height for better display
+                          height: 150,
                           width: double.infinity,
-                          fit: BoxFit.contain, // Ensures the entire image is displayed
+                          fit: BoxFit.contain,
                           errorBuilder: (context, error, stackTrace) {
                             return Center(
                               child: Icon(

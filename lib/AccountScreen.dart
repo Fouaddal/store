@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'User.dart';
+import 'HomeScreen.dart';
 
 class AccountScreen extends StatefulWidget {
   final Map<String, dynamic>? user;
@@ -16,7 +17,7 @@ class _AccountScreenState extends State<AccountScreen> {
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
-  bool _isEditing = true;  // Variable to track if the user is editing
+  bool _isEditing = true;
 
   @override
   void initState() {
@@ -59,7 +60,13 @@ class _AccountScreenState extends State<AccountScreen> {
           SnackBar(content: Text('User data saved successfully')),
         );
         setState(() {
-          _isEditing = false;  // Switch to view mode
+          _isEditing = false;
+        });
+        // Update the text controllers with saved data
+        setState(() {
+          _firstNameController.text = user.firstName;
+          _lastNameController.text = user.lastName;
+          _emailController.text = user.email;
         });
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -75,7 +82,7 @@ class _AccountScreenState extends State<AccountScreen> {
 
   void _editData() {
     setState(() {
-      _isEditing = true;  // Switch to edit mode
+      _isEditing = true;
     });
   }
 
@@ -108,10 +115,17 @@ class _AccountScreenState extends State<AccountScreen> {
               TextField(
                 controller: _firstNameController,
                 decoration: InputDecoration(
-                  prefixIcon: Icon(Icons.person),
-                  labelText: 'First Name',
+                  prefixIcon: Icon(Icons.person,
+                  color: Colors.blue,
+                  ),
+                  hintText: 'First Name',
+                  hintStyle: TextStyle(
+                    color: Colors.black,
+                    fontFamily: 'Merriweather',
+                    fontSize: 20,
+                  ),
                   border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
+                    borderRadius: BorderRadius.circular(10.0),
                   ),
                 ),
               ),
@@ -119,10 +133,17 @@ class _AccountScreenState extends State<AccountScreen> {
               TextField(
                 controller: _lastNameController,
                 decoration: InputDecoration(
-                  prefixIcon: Icon(Icons.tag),
-                  labelText: 'Last Name',
+                  prefixIcon: Icon(Icons.tag,
+                  color: Colors.blue,
+                  ),
+                  hintText: 'Last Name',
+                  hintStyle: TextStyle(
+                    color: Colors.black,
+                    fontFamily: 'Merriweather',
+                    fontSize: 20,
+                  ),
                   border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
+                    borderRadius: BorderRadius.circular(10.0),
                   ),
                 ),
               ),
@@ -130,16 +151,25 @@ class _AccountScreenState extends State<AccountScreen> {
               TextField(
                 controller: _emailController,
                 decoration: InputDecoration(
-                  prefixIcon: Icon(Icons.email),
-                  labelText: 'Email',
+                  prefixIcon: Icon(Icons.email,
+                  color: Colors.blue,
+                  ),
+                  hintText: 'Email',
+                  hintStyle: TextStyle(
+                    color: Colors.black,
+                    fontFamily: 'Merriweather',
+                    fontSize: 20,
+                  ),
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0)
+                    borderRadius: BorderRadius.circular(10.0),
                   ),
                 ),
               ),
               SizedBox(height: 16.0),
               ElevatedButton(
-                onPressed: _uploadData,
+                onPressed: () {
+                  _uploadData();
+                },
                 child: Text('Save'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue,

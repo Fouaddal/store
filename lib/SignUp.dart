@@ -1,9 +1,9 @@
-import 'package:connect/SignInScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'HomeScreen.dart'; // Import HomeScreen
 import 'AccountScreen.dart'; // Import AccountScreen
+import 'SignInScreen.dart';
 
 class SignUpScreen extends StatefulWidget {
   @override
@@ -17,6 +17,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController _phoneNumberController = TextEditingController();
   final TextEditingController _otpController = TextEditingController();
   bool _codeSent = false;
+  bool _otpVerified = false;
 
   Future<void> sendSms() async {
     try {
@@ -70,7 +71,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('OTP verified successfully!')),
         );
-        // Set _codeSent to false if needed, or handle success state here
+        setState(() {
+          _otpVerified = true;
+        });
       } else {
         print('Failed to verify OTP: ${response.statusCode} - ${response.body}');
         ScaffoldMessenger.of(context).showSnackBar(
@@ -107,10 +110,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
     print('User data: ${jsonEncode(user)}'); // Debugging line
 
+    // Navigate to HomeScreen with the user data
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => AccountScreen(user: user),
+        builder: (context) => HomeScreen(
+          phoneNumber: _phoneNumberController.text,
+          addToCart: (item) {}, // Placeholder for addToCart function
+          user: user, // Pass user data to HomeScreen
+        ),
       ),
     );
   }
@@ -130,7 +138,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
             color: Colors.white,
           ),
         ),
-
       ),
       body: ListView(
         padding: const EdgeInsets.all(16.0),
@@ -144,7 +151,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 fontFamily: 'Merriweather',
                 fontSize: 20,
               ),
-              prefixIcon: Icon(Icons.person,color: Colors.blue),
+              prefixIcon: Icon(Icons.person, color: Colors.blue),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10.0),
               ),
@@ -160,10 +167,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 fontFamily: 'Merriweather',
                 fontSize: 20,
               ),
-              prefixIcon: Icon(Icons.tag,color: Colors.blue),
+              prefixIcon: Icon(Icons.tag, color: Colors.blue),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10.0),
-
               ),
             ),
           ),
@@ -177,7 +183,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 fontFamily: 'Merriweather',
                 fontSize: 20,
               ),
-              prefixIcon: Icon(Icons.email,color: Colors.blue),
+              prefixIcon: Icon(Icons.email, color: Colors.blue),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10.0),
               ),
@@ -194,9 +200,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 fontFamily: 'Merriweather',
                 fontSize: 20,
               ),
-              prefixIcon: Icon(Icons.phone,
-              color: Colors.blue,
-              ),
+              prefixIcon: Icon(Icons.phone, color: Colors.blue),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10.0),
               ),
@@ -214,10 +218,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   fontFamily: 'Merriweather',
                   fontSize: 20,
                 ),
-                prefixIcon: Icon(Icons.lock),
+                prefixIcon: Icon(Icons.lock, color: Colors.blue),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
-
                 ),
               ),
               keyboardType: TextInputType.number,
@@ -238,33 +241,34 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 100.0, vertical: 5.0),
-            child: ElevatedButton(
-              onPressed: signUp,
-              child: Text('Sign Up'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blue,
-                foregroundColor: Colors.white,
-                textStyle: TextStyle(
-                  fontFamily: 'Merriweather',
-                  fontSize: 18,
+          if (_otpVerified)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 100.0, vertical: 5.0),
+              child: ElevatedButton(
+                onPressed: signUp,
+                child: Text('Sign Up'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blue,
+                  foregroundColor: Colors.white,
+                  textStyle: TextStyle(
+                    fontFamily: 'Merriweather',
+                    fontSize: 18,
+                  ),
                 ),
               ),
             ),
-          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text('Already have an account?'),
               TextButton(
-                onPressed: (){
+                onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context)=>SignInScreen()),
+                    MaterialPageRoute(builder: (context) => SignInScreen()),
                   );
                 },
-                child: Text('Sing In') ,
+                child: Text('Sign In'),
               )
             ],
           ),
