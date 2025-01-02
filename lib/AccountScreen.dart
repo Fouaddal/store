@@ -91,6 +91,16 @@ class _AccountScreenState extends State<AccountScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        backgroundColor: Colors.blue,
+        title:
+        Text(
+          'Change Your Details',
+          style: TextStyle(
+            color: Colors.white,
+            fontFamily: 'Merriweather',
+          ),
+        ),
+        automaticallyImplyLeading: false,
         actions: [
           if (!_isEditing)
             IconButton(

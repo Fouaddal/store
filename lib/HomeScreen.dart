@@ -11,11 +11,13 @@ String formatImageUrl(String relativeUrl) {
 
 class HomeScreen extends StatefulWidget {
   final Function(CartItem) addToCart;
-  final Map<String, dynamic> user; // User data passed from SignUpScreen
+  final Map<String, dynamic> user; // User data passed from SignInScreen/SignUpScreen
+  final String phoneNumber; // Keep phoneNumber for SignIn and SignUp
 
   HomeScreen({
     required this.addToCart,
-    required this.user, required String phoneNumber,
+    required this.user,
+    required this.phoneNumber,
   });
 
   @override
@@ -92,7 +94,8 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
       default:
         return AppBar(
           backgroundColor: Colors.blue,
-          title: Text(
+          title:
+          Text(
             'Account',
             style: TextStyle(
               color: Colors.white,
@@ -125,7 +128,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
             onFinish: () {},
           ),
           AccountScreen(
-            user: widget.user, // Pass the user data to AccountScreen
+            user: widget.user, // Pass the user data
           ),
         ],
       ),
