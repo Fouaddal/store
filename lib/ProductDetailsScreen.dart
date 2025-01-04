@@ -13,7 +13,15 @@ class ProductDetailsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Product Details'),
+        title: Text('Product Details',
+          style: TextStyle(
+            fontFamily: 'Merriweather',
+            fontSize: 25,
+            color: Colors.white,
+          ),
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.blue,
       ),
       body: FutureBuilder<Map>(
         future: productService.getProductById(productId),
@@ -23,23 +31,29 @@ class ProductDetailsScreen extends StatelessWidget {
             return Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Image.network(product['productImage']),
                   SizedBox(height: 5),
                   Text(
                     product['productName'],
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontFamily: 'Merriweather' ,fontSize: 24, fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(height: 10),
+                  // SizedBox(height: 1),
                   Text(
                     'ID: ${product['id']}',
-                    style: TextStyle(fontSize: 16, color: Colors.white),
+                    style: TextStyle(fontFamily: 'Merriweather',fontSize: 16, color: Colors.white),
+                  ),
+                  SizedBox(
+                    width: 150,
+                    child: Divider(
+                      color: Colors.blue,
+                    ),
                   ),
                   SizedBox(height: 10),
                   Text(
                     'Description: ${product['productDescription']}',
-                    style: TextStyle(fontSize: 16),
+                    style: TextStyle(fontFamily: 'Merriweather',fontSize: 16),
                   ),
                   Spacer(),
                   Center(
@@ -54,7 +68,15 @@ class ProductDetailsScreen extends StatelessWidget {
                         addToCart(item);
                       },
                       child: Text('Add to Cart'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue,
+                        foregroundColor: Colors.white,
+                        textStyle: TextStyle(
+                          fontFamily: 'Merriweather',
+                          fontSize: 18,
+                        ),
                     ),
+                  ),
                   ),
                 ],
               ),

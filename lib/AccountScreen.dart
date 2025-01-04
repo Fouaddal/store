@@ -181,10 +181,10 @@ class _AccountScreenState extends State<AccountScreen> {
               TextField(
                 controller: _emailController,
                 decoration: InputDecoration(
-                  prefixIcon: Icon(Icons.email,
+                  prefixIcon: Icon(Icons.location_city,
                     color: Colors.blue,
                   ),
-                  hintText: 'Email',
+                  hintText: 'Location',
                   hintStyle: TextStyle(
                     color: Colors.black,
                     fontFamily: 'Merriweather',

@@ -177,13 +177,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
           TextField(
             controller: _emailController,
             decoration: InputDecoration(
-              hintText: 'Email',
+              hintText: 'Location',
               hintStyle: TextStyle(
                 color: Colors.black,
                 fontFamily: 'Merriweather',
                 fontSize: 20,
               ),
-              prefixIcon: Icon(Icons.email, color: Colors.blue),
+              prefixIcon: Icon(Icons.location_city, color: Colors.blue),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10.0),
               ),

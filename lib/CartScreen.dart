@@ -42,6 +42,14 @@ class CartScreen extends StatelessWidget {
                 onFinish();
               },
               child: Text('Finish Purchase'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blue,
+                foregroundColor: Colors.white,
+                textStyle: TextStyle(
+                  fontFamily: 'Merriweather',
+                  fontSize: 18,
+                ),
+              ),
             ),
           ],
         ),
