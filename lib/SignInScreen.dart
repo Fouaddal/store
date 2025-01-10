@@ -192,7 +192,7 @@ class _SignInScreenState extends State<SignInScreen> {
             //           MaterialPageRoute(builder: (context)=>SignUpScreen()),
             //         );
             //       },
-            //       child: Text('Sign Up') ,
+            //       child: Text('Sing Up') ,
             //     )
             //   ],
             // ),

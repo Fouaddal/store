@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:store1/SignInScreen.dart';
 import 'dart:convert';
+import 'SignInScreen.dart';
 import 'User.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
@@ -130,9 +130,19 @@ class _AccountScreenState extends State<AccountScreen> {
       body: ListView(
         padding: const EdgeInsets.all(16.0),
         children: <Widget>[
-          image != null
-              ? Image.file(image!, height: 200, width: 200, fit: BoxFit.cover)
-              : const Text('No image selected'),
+          Center(
+            child: Container(
+              height: 100.0,
+              width: 100.0,
+              child: FloatingActionButton(onPressed: pickImageFromGallery,
+                child:image != null
+                    ? ClipOval(child: Image.file(image!, height: double.infinity, width: double.infinity, fit: BoxFit.cover))
+                :Icon(Icons.add_a_photo,color: Colors.blue),
+                backgroundColor: image !=null ? Colors.transparent:Colors.white,
+                shape: CircleBorder() ,
+              ),
+            ),
+          ),
           SizedBox(height: 16.0),
           if (widget.user?['phone_number'] != null)
             Text(
@@ -241,11 +251,10 @@ class _AccountScreenState extends State<AccountScreen> {
             children: [
               ElevatedButton(onPressed:(){
                 Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context)=>SignInScreen())
+                  context,
+                  MaterialPageRoute(builder: (context) => SignInScreen()),
                 );
-              }
-                  , child:Text('Log out'),
+              }, child: Text('Log out'),
                 style: ElevatedButton.styleFrom(
                   foregroundColor: Colors.white,
                   backgroundColor: Colors.red,
