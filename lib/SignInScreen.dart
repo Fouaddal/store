@@ -181,21 +181,21 @@ class _SignInScreenState extends State<SignInScreen> {
               ),
             ),
 
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text('Don\'t have an account?'),
-                TextButton(
-                  onPressed: (){
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context)=>SignUpScreen()),
-                    );
-                  },
-                  child: Text('Sing Up') ,
-                )
-              ],
-            ),
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.center,
+            //   children: [
+            //     Text('Don\'t have an account?'),
+            //     TextButton(
+            //       onPressed: (){
+            //         Navigator.push(
+            //           context,
+            //           MaterialPageRoute(builder: (context)=>SignUpScreen()),
+            //         );
+            //       },
+            //       child: Text('Sign Up') ,
+            //     )
+            //   ],
+            // ),
 
           ],
         ),

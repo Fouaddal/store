@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:store1/SignInScreen.dart';
 import 'dart:convert';
 import 'User.dart';
-// import 'package:image_picker/image_picker.dart';
+import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
 
@@ -89,19 +90,19 @@ class _AccountScreenState extends State<AccountScreen> {
     });
   }
 
-  // File? image; // Variable to store the selected image
-  // Future<void> pickImageFromGallery() async {
-  //   try {
-  //     final pickedImage = await ImagePicker().pickImage(source: ImageSource.gallery);
-  //     if (pickedImage == null) return; // If no image selected, exit
-  //
-  //     setState(() {
-  //       image = File(pickedImage.path); // Update the image and UI
-  //     });
-  //   } catch (e) {
-  //     print('Failed to pick image: $e'); // Error handling
-  //   }
-  // }
+  File? image; // Variable to store the selected image
+  Future<void> pickImageFromGallery() async {
+    try {
+      final pickedImage = await ImagePicker().pickImage(source: ImageSource.gallery);
+      if (pickedImage == null) return; // If no image selected, exit
+
+      setState(() {
+        image = File(pickedImage.path); // Update the image and UI
+      });
+    } catch (e) {
+      print('Failed to pick image: $e'); // Error handling
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -129,9 +130,9 @@ class _AccountScreenState extends State<AccountScreen> {
       body: ListView(
         padding: const EdgeInsets.all(16.0),
         children: <Widget>[
-          // image != null
-          //     ? Image.file(image!, height: 200, width: 200, fit: BoxFit.cover)
-          //     : const Text('No image selected'),
+          image != null
+              ? Image.file(image!, height: 200, width: 200, fit: BoxFit.cover)
+              : const Text('No image selected'),
           SizedBox(height: 16.0),
           if (widget.user?['phone_number'] != null)
             Text(
@@ -236,6 +237,26 @@ class _AccountScreenState extends State<AccountScreen> {
               ),
             ],
           ),
+          Column(
+            children: [
+              ElevatedButton(onPressed:(){
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context)=>SignInScreen())
+                );
+              }
+                  , child:Text('Log out'),
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: Colors.white,
+                  backgroundColor: Colors.red,
+                  textStyle: TextStyle(
+                    fontFamily: 'Merriweather',
+                    fontSize: 18,
+                  ),
+                ),
+              ),
+            ],
+          )
         ],
       ),
     );
