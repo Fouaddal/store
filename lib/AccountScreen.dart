@@ -2,10 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'User.dart';
-// import 'package:image_picker/image_picker.dart';
-import 'dart:io';
-
-
+import 'HomeScreen.dart'; // Import HomeScreen
 
 class AccountScreen extends StatefulWidget {
   final Map<String, dynamic>? user;
@@ -64,13 +61,27 @@ class _AccountScreenState extends State<AccountScreen> {
         );
         setState(() {
           _isEditing = false;
-        });
-        // Update the text controllers with saved data
-        setState(() {
           _firstNameController.text = user.firstName;
           _lastNameController.text = user.lastName;
           _emailController.text = user.email;
         });
+
+        // Navigate to HomeScreen after saving data
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => HomeScreen(
+              phoneNumber: widget.user?['phone_number'] ?? '',
+              addToCart: (item) {},
+              user: {
+                'phone_number': widget.user?['phone_number'] ?? '',
+                'first_name': _firstNameController.text,
+                'last_name': _lastNameController.text,
+                'email': _emailController.text,
+              },
+            ),
+          ),
+        );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Failed to save user data: ${response.statusCode}')),
@@ -89,28 +100,13 @@ class _AccountScreenState extends State<AccountScreen> {
     });
   }
 
-  // File? image; // Variable to store the selected image
-  // Future<void> pickImageFromGallery() async {
-  //   try {
-  //     final pickedImage = await ImagePicker().pickImage(source: ImageSource.gallery);
-  //     if (pickedImage == null) return; // If no image selected, exit
-  //
-  //     setState(() {
-  //       image = File(pickedImage.path); // Update the image and UI
-  //     });
-  //   } catch (e) {
-  //     print('Failed to pick image: $e'); // Error handling
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.blue,
-        title:
-        Text(
+        title: Text(
           'Change Your Details',
           style: TextStyle(
             color: Colors.white,
@@ -129,9 +125,6 @@ class _AccountScreenState extends State<AccountScreen> {
       body: ListView(
         padding: const EdgeInsets.all(16.0),
         children: <Widget>[
-          // image != null
-          //     ? Image.file(image!, height: 200, width: 200, fit: BoxFit.cover)
-          //     : const Text('No image selected'),
           SizedBox(height: 16.0),
           if (widget.user?['phone_number'] != null)
             Text(
@@ -145,9 +138,7 @@ class _AccountScreenState extends State<AccountScreen> {
               TextField(
                 controller: _firstNameController,
                 decoration: InputDecoration(
-                  prefixIcon: Icon(Icons.person,
-                    color: Colors.blue,
-                  ),
+                  prefixIcon: Icon(Icons.person, color: Colors.blue),
                   hintText: 'First Name',
                   hintStyle: TextStyle(
                     color: Colors.black,
@@ -163,9 +154,7 @@ class _AccountScreenState extends State<AccountScreen> {
               TextField(
                 controller: _lastNameController,
                 decoration: InputDecoration(
-                  prefixIcon: Icon(Icons.tag,
-                    color: Colors.blue,
-                  ),
+                  prefixIcon: Icon(Icons.tag, color: Colors.blue),
                   hintText: 'Last Name',
                   hintStyle: TextStyle(
                     color: Colors.black,
@@ -181,10 +170,8 @@ class _AccountScreenState extends State<AccountScreen> {
               TextField(
                 controller: _emailController,
                 decoration: InputDecoration(
-                  prefixIcon: Icon(Icons.location_city,
-                    color: Colors.blue,
-                  ),
-                  hintText: 'Location',
+                  prefixIcon: Icon(Icons.email, color: Colors.blue),
+                  hintText: 'Email',
                   hintStyle: TextStyle(
                     color: Colors.black,
                     fontFamily: 'Merriweather',
@@ -197,9 +184,7 @@ class _AccountScreenState extends State<AccountScreen> {
               ),
               SizedBox(height: 16.0),
               ElevatedButton(
-                onPressed: () {
-                  _uploadData();
-                },
+                onPressed: _uploadData,
                 child: Text('Save'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue,
@@ -217,22 +202,17 @@ class _AccountScreenState extends State<AccountScreen> {
             children: [
               Text(
                 'First Name: ${_firstNameController.text}',
-                style: TextStyle(
-                    fontFamily: 'Merriweather',
-                    fontSize: 20),
+                style: TextStyle(fontFamily: 'Merriweather', fontSize: 20),
               ),
               SizedBox(height: 16.0),
               Text(
                 'Last Name: ${_lastNameController.text}',
-                style: TextStyle(
-                    fontFamily: 'Merriweather',
-                    fontSize: 20),
+                style: TextStyle(fontFamily: 'Merriweather', fontSize: 20),
               ),
               SizedBox(height: 16.0),
               Text(
                 'Email: ${_emailController.text}',
-                style: TextStyle(fontFamily: 'Merriweather',
-                    fontSize: 20),
+                style: TextStyle(fontFamily: 'Merriweather', fontSize: 20),
               ),
             ],
           ),

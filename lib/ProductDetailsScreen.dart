@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
+import 'CartScreen.dart';
 import 'product.dart';
 import 'CartItem.dart';
+import 'Cart.dart'; // Import Cart singleton
 
 class ProductDetailsScreen extends StatelessWidget {
   final String productId;
   final product productService = product();
-  final Function(CartItem) addToCart;
 
-  ProductDetailsScreen({required this.productId, required this.addToCart});
+  ProductDetailsScreen({required this.productId, required Function(CartItem p1) addToCart});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Product Details',
+        title: Text(
+          'Product Details',
           style: TextStyle(
             fontFamily: 'Merriweather',
             fontSize: 25,
@@ -22,6 +24,19 @@ class ProductDetailsScreen extends StatelessWidget {
         ),
         centerTitle: true,
         backgroundColor: Colors.blue,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.shopping_cart),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => CartScreen(),
+                ),
+              );
+            },
+          ),
+        ],
       ),
       body: FutureBuilder<Map>(
         future: productService.getProductById(productId),
@@ -37,12 +52,19 @@ class ProductDetailsScreen extends StatelessWidget {
                   SizedBox(height: 5),
                   Text(
                     product['productName'],
-                    style: TextStyle(fontFamily: 'Merriweather' ,fontSize: 24, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                      fontFamily: 'Merriweather',
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                  // SizedBox(height: 1),
                   Text(
                     'ID: ${product['id']}',
-                    style: TextStyle(fontFamily: 'Merriweather',fontSize: 16, color: Colors.white),
+                    style: TextStyle(
+                      fontFamily: 'Merriweather',
+                      fontSize: 16,
+                      color: Colors.white,
+                    ),
                   ),
                   SizedBox(
                     width: 150,
@@ -53,7 +75,10 @@ class ProductDetailsScreen extends StatelessWidget {
                   SizedBox(height: 10),
                   Text(
                     'Description: ${product['productDescription']}',
-                    style: TextStyle(fontFamily: 'Merriweather',fontSize: 16),
+                    style: TextStyle(
+                      fontFamily: 'Merriweather',
+                      fontSize: 16,
+                    ),
                   ),
                   Spacer(),
                   Center(
@@ -65,7 +90,13 @@ class ProductDetailsScreen extends StatelessWidget {
                           description: product['productDescription'],
                           imageUrl: product['productImage'],
                         );
-                        addToCart(item);
+                        Cart().addItem(item);
+
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Added to Cart!'),
+                          ),
+                        );
                       },
                       child: Text('Add to Cart'),
                       style: ElevatedButton.styleFrom(
@@ -75,8 +106,8 @@ class ProductDetailsScreen extends StatelessWidget {
                           fontFamily: 'Merriweather',
                           fontSize: 18,
                         ),
+                      ),
                     ),
-                  ),
                   ),
                 ],
               ),
@@ -93,6 +124,4 @@ class ProductDetailsScreen extends StatelessWidget {
 }
 
 String formatImageUrl(String relativeUrl) {
-  return 'http://10.0.2.2:8000/$relativeUrl';
-}
-
+  return 'http://10.0.2.2:8000/$relativeUrl';}

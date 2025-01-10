@@ -20,8 +20,8 @@ class MyApp extends StatelessWidget {
         primaryColor: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: SignInScreen(),
-      /*HomeScreen(addToCart: (CartItem ) {  }, user: {}, phoneNumber: '', ),*/
+      home:
+      HomeScreen(addToCart: (CartItem ) {  }, user: {}, phoneNumber: '', ),
       debugShowCheckedModeBanner: false,
     );
   }

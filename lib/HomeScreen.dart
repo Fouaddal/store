@@ -135,13 +135,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
             searchQuery: _searchQuery,
           ),
           CartScreen(
-            cartItems: cartItems,
-            onRemoveItem: (item) {
-              setState(() {
-                cartItems.remove(item);
-              });
-            },
-            onFinish: () {},
+
           ),
           AccountScreen(
             user: widget.user, // Pass the user data
