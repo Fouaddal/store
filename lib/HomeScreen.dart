@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'FavoritesScreen.dart';
 import 'product.dart';
 import 'ProductDetailsScreen.dart';
 import 'CartItem.dart';
@@ -53,6 +54,20 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
     switch (_selectedIndex) {
       case 0:
         return AppBar(
+          actions: [
+            IconButton(
+              icon: Icon(
+                Icons.favorite,
+                color: Colors.red,
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => FavoritesScreen()),
+                );
+              },
+            ),
+          ],
           backgroundColor: Colors.blue,
           title: TextField(
             decoration: InputDecoration(

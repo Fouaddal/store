@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'CartItem.dart';
-import 'Cart.dart'; // Import Cart singleton
+import 'Cart.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'FavoritesScreen.dart';
+import 'notificantions.dart';
+import 'OrderConfirmationScreen.dart';
 
 class CartScreen extends StatefulWidget {
   @override
@@ -11,32 +14,38 @@ class CartScreen extends StatefulWidget {
 
 class _CartScreenState extends State<CartScreen> {
   Future<void> _finishPurchase() async {
-    // Ensure Cart().items is not empty
     if (Cart().items.isEmpty) {
       print('Cart is empty');
       return;
     }
 
-    // API call to store cart items
     final url = Uri.parse('http://10.0.2.2:8000/api/cart'); // Replace with your API endpoint
     final cartData = {
       'cartItems': Cart().items.map((item) => item.toJson()).toList(),
     };
 
-    print('Sending cart data: ${json.encode(cartData)}'); // Debug print
+    print('Sending cart data: ${json.encode(cartData)}');
 
     final response = await http.post(
       url,
       headers: {'Content-Type': 'application/json'},
-      body: json.encode(cartData), // Ensure 'cartItems' matches server-side key
+      body: json.encode(cartData),
     );
 
-    print('Response status: ${response.statusCode}'); // Debug print
-    print('Response body: ${response.body}'); // Debug print
+    print('Response status: ${response.statusCode}');
+    print('Response body: ${response.body}');
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Purchase completed successfully!')),
+      );
+
+      // Navigate to the confirmation screen with the cart items
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => OrderConfirmationScreen(orderedItems: List.from(Cart().items)),
+        ),
       );
 
       // Clear the cart items after successful purchase
@@ -80,18 +89,8 @@ class _CartScreenState extends State<CartScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Cart',
-          style: TextStyle(
-            fontFamily: 'Merriweather',
-            fontSize: 25,
-            color: Colors.white,
-          ),
-        ),
-        backgroundColor: Colors.blue,
-      ),
       backgroundColor: Colors.white,
+
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -117,7 +116,7 @@ class _CartScreenState extends State<CartScreen> {
                       ),
                     ),
                     trailing: IconButton(
-                      icon: Icon(Icons.remove_circle),
+                      icon: Icon(Icons.remove_circle,color: Colors.red,),
                       onPressed: () {
                         setState(() {
                           Cart().removeItem(Cart().items[index]);
@@ -129,7 +128,14 @@ class _CartScreenState extends State<CartScreen> {
               ),
             ),
             ElevatedButton(
-              onPressed: _showConfirmationDialog,
+              onPressed: (){
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => OrderConfirmationScreen(orderedItems: Cart().items   )),
+                );
+                _showConfirmationDialog;
+                LocalNotifications().scheduleOrderNotifications();
+                },
               child: Text('Finish Purchase'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.blue,

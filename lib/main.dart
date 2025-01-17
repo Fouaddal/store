@@ -1,11 +1,15 @@
 import 'package:store1/HomeScreen.dart';
 import 'package:store1/SignInScreen.dart';
 import 'package:flutter/material.dart';
+import 'package:store1/notificantions.dart';
 import 'SignInScreen.dart';
 import 'HomeScreen.dart';
+import 'notificantions.dart';
 
 
-void main() {
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await LocalNotifications.init();
   runApp(const MyApp());
 }
 

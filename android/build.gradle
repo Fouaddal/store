@@ -1,3 +1,16 @@
+// Root-level build.gradle file
+
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        // Correct classpath placement inside the buildscript block
+        classpath 'com.android.tools.build:gradle:8.0.0'  // Correct Gradle plugin version
+    }
+}
+
 allprojects {
     repositories {
         google()
@@ -6,9 +19,11 @@ allprojects {
 }
 
 rootProject.buildDir = "../build"
+
 subprojects {
     project.buildDir = "${rootProject.buildDir}/${project.name}"
 }
+
 subprojects {
     project.evaluationDependsOn(":app")
 }

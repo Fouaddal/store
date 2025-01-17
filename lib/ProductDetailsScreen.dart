@@ -1,14 +1,58 @@
 import 'package:flutter/material.dart';
+import 'package:store1/notificantions.dart';
 import 'CartScreen.dart';
+import 'FavoritesScreen.dart';
 import 'product.dart';
 import 'CartItem.dart';
-import 'Cart.dart'; // Import Cart singleton
+import 'Cart.dart';
 
-class ProductDetailsScreen extends StatelessWidget {
+class ProductDetailsScreen extends StatefulWidget {
   final String productId;
   final product productService = product();
 
-  ProductDetailsScreen({required this.productId, required Function(CartItem p1) addToCart});
+  ProductDetailsScreen({
+    required this.productId,
+    required Function(CartItem p1) addToCart,
+  });
+
+  @override
+  _ProductDetailsScreenState createState() => _ProductDetailsScreenState();
+}
+
+class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
+  bool _isFavorite = false;
+
+  @override
+  void initState() {
+    super.initState();
+    // Check if the product is in the favorites list
+    widget.productService.getProductById(widget.productId).then((product) {
+      setState(() {
+        _isFavorite = FavoritesScreen.favoriteItems
+            .any((item) => item.id == product['id'].toString());
+      });
+    });
+  }
+
+  void _toggleFavorite(Map product) {
+    setState(() {
+      CartItem item = CartItem(
+        id: product['id'].toString(),
+        name: product['productName'],
+        description: product['productDescription'],
+        imageUrl: product['productImage'],
+        isFavorite: !_isFavorite,
+      );
+
+      if (_isFavorite) {
+        FavoritesScreen.favoriteItems.removeWhere((fav) => fav.id == item.id);
+      } else {
+        FavoritesScreen.favoriteItems.add(item);
+      }
+
+      _isFavorite = !_isFavorite;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,24 +66,34 @@ class ProductDetailsScreen extends StatelessWidget {
             color: Colors.white,
           ),
         ),
-        centerTitle: true,
-        backgroundColor: Colors.blue,
         actions: [
           IconButton(
-            icon: Icon(Icons.shopping_cart),
+            icon: Icon(
+              Icons.favorite,
+              color: Colors.red,
+              // color: _isFavorite ? Colors.red : Colors.grey,
+            ),
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                  builder: (context) => CartScreen(),
-                ),
-              );
+                MaterialPageRoute(builder: (context) => FavoritesScreen()),
+              ).then((_) {
+                // Recheck favorite status when returning
+                widget.productService.getProductById(widget.productId).then((product) {
+                  setState(() {
+                    _isFavorite = FavoritesScreen.favoriteItems
+                        .any((item) => item.id == product['id'].toString());
+                  });
+                });
+              });
             },
           ),
         ],
+        centerTitle: true,
+        backgroundColor: Colors.blue,
       ),
       body: FutureBuilder<Map>(
-        future: productService.getProductById(productId),
+        future: widget.productService.getProductById(widget.productId),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             var product = snapshot.data!;
@@ -63,7 +117,7 @@ class ProductDetailsScreen extends StatelessWidget {
                     style: TextStyle(
                       fontFamily: 'Merriweather',
                       fontSize: 16,
-                      color: Colors.white,
+                      color: Colors.black,
                     ),
                   ),
                   SizedBox(
@@ -81,33 +135,55 @@ class ProductDetailsScreen extends StatelessWidget {
                     ),
                   ),
                   Spacer(),
-                  Center(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        CartItem item = CartItem(
-                          id: product['id'].toString(),
-                          name: product['productName'],
-                          description: product['productDescription'],
-                          imageUrl: product['productImage'],
-                        );
-                        Cart().addItem(item);
-
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text('Added to Cart!'),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      IconButton(
+                        icon: Icon(
+                          _isFavorite ? Icons.favorite : Icons.favorite_border,
+                          color: _isFavorite ? Colors.red : Colors.grey,
+                          size: 30,
+                        ),
+                        onPressed: () {
+                          _toggleFavorite(product);
+                        },
+                      ),
+                      Expanded(
+                        child: Center(
+                          child: ElevatedButton(
+                            onPressed: () {
+                              LocalNotifications.showSimpleNotification(
+                                title: 'Done!',
+                                body: 'This product has been added to your cart',
+                              );
+                              CartItem item = CartItem(
+                                id: product['id'].toString(),
+                                name: product['productName'],
+                                description: product['productDescription'],
+                                imageUrl: product['productImage'],
+                                isFavorite: _isFavorite,
+                              );
+                              Cart().addItem(item);
+                          
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text('Added to Cart!'),
+                                ),
+                              );
+                            },
+                            child: Text('Add to Cart'),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.blue,
+                              foregroundColor: Colors.white,
+                              textStyle: TextStyle(
+                                fontFamily: 'Merriweather',
+                                fontSize: 18,
+                              ),
+                            ),
                           ),
-                        );
-                      },
-                      child: Text('Add to Cart'),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue,
-                        foregroundColor: Colors.white,
-                        textStyle: TextStyle(
-                          fontFamily: 'Merriweather',
-                          fontSize: 18,
                         ),
                       ),
-                    ),
+                    ],
                   ),
                 ],
               ),
@@ -122,6 +198,3 @@ class ProductDetailsScreen extends StatelessWidget {
     );
   }
 }
-
-String formatImageUrl(String relativeUrl) {
-  return 'http://10.0.2.2:8000/$relativeUrl';}
