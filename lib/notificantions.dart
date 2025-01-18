@@ -80,34 +80,33 @@ class LocalNotifications {
 
 
   void scheduleOrderNotifications() {
-    print("scheduleOrderNotifications() called");
 
-    LocalNotifications.scheduleNotification(
-      title: 'Done',
-      body: 'Checking your order',
-      delay: 1,
-      notificationId: 1,
-    );
+    // LocalNotifications.scheduleNotification(
+    //   title: 'Done',
+    //   body: 'Checking your order',
+    //   delay: 1,
+    //   notificationId: 1,
+    // );
 
     LocalNotifications.scheduleNotification(
       title: 'Order Accepted',
       body: 'Your order has been accepted.',
       delay: 10,
-      notificationId: 2,
+      notificationId: 1,
     );
 
     LocalNotifications.scheduleNotification(
       title: 'Out for Delivery',
       body: 'Your order is out for delivery!',
       delay: 20,
-      notificationId: 3,
+      notificationId: 2,
     );
 
     LocalNotifications.scheduleNotification(
       title: 'Order Delivered',
       body: 'Your order has been delivered!',
       delay: 30,
-      notificationId: 4,
+      notificationId: 3,
     );
   }
 }

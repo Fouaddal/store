@@ -129,13 +129,12 @@ class _CartScreenState extends State<CartScreen> {
             ),
             ElevatedButton(
               onPressed: (){
+                _showConfirmationDialog;
                 Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => OrderConfirmationScreen(orderedItems: Cart().items   )),
                 );
-                _showConfirmationDialog;
-                LocalNotifications().scheduleOrderNotifications();
-                },
+              },
               child: Text('Finish Purchase'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.blue,
