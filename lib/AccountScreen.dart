@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'HomeScreen.dart';
 import 'SignInScreen.dart';
 import 'User.dart';
-import 'package:image_picker/image_picker.dart';
+//import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
 
@@ -66,12 +67,11 @@ class _AccountScreenState extends State<AccountScreen> {
         setState(() {
           _isEditing = false;
         });
-        // Update the text controllers with saved data
-        setState(() {
-          _firstNameController.text = user.firstName;
-          _lastNameController.text = user.lastName;
-          _emailController.text = user.email;
-        });
+        // Navigate to HomeScreen
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => HomeScreen(addToCart: (CartItem ) {  }, user: {}, phoneNumber: '',)),
+        );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Failed to save user data: ${response.statusCode}')),
@@ -83,6 +83,7 @@ class _AccountScreenState extends State<AccountScreen> {
       );
     }
   }
+
 
   void _editData() {
     setState(() {

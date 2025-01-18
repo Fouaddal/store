@@ -189,7 +189,7 @@ class HomeScreenTab extends StatelessWidget {
           return GridView.builder(
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
-              childAspectRatio: 3 / 4,
+              childAspectRatio: 2 / 3, // Adjust this value to make the card bigger
               crossAxisSpacing: 10,
               mainAxisSpacing: 10,
             ),
@@ -248,6 +248,12 @@ class HomeScreenTab extends StatelessWidget {
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                             ),
+                            SizedBox(height: 5), // Add some spacing
+                            Text(
+                              '\$${products[i]['productPrice'].toString()}', // Display product price
+                              style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(height: 5), // Add some spacing
                           ],
                         ),
                       ),

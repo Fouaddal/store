@@ -80,6 +80,20 @@ class ProductDetailsScreen extends StatelessWidget {
                       fontSize: 16,
                     ),
                   ),
+                  Text(
+                    'Price: \$${(product['productPrice'] ?? 0).toDouble()}', // Convert to double
+                    style: TextStyle(
+                      fontFamily: 'Merriweather',
+                      fontSize: 16,
+                    ),
+                  ),
+                  Text(
+                    'Quantity: 1', // Set quantity to 1
+                    style: TextStyle(
+                      fontFamily: 'Merriweather',
+                      fontSize: 16,
+                    ),
+                  ),
                   Spacer(),
                   Center(
                     child: ElevatedButton(
@@ -89,6 +103,8 @@ class ProductDetailsScreen extends StatelessWidget {
                           name: product['productName'],
                           description: product['productDescription'],
                           imageUrl: product['productImage'],
+                          price: (product['productPrice'] ?? 0).toDouble(), // Convert to double
+                          quantity: 1, // Set quantity to 1
                         );
                         Cart().addItem(item);
 
@@ -124,4 +140,5 @@ class ProductDetailsScreen extends StatelessWidget {
 }
 
 String formatImageUrl(String relativeUrl) {
-  return 'http://10.0.2.2:8000/$relativeUrl';}
+  return 'http://10.0.2.2:8000/$relativeUrl';
+}
