@@ -9,13 +9,17 @@ android {
     namespace = "com.example.store1"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
+    defaultConfig {
+        multiDexEnabled true
+    }
 
     compileOptions {
+        coreLibraryDesugaringEnabled true
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
 
-    kotlinOptions {
+     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8
     }
 
@@ -41,4 +45,8 @@ android {
 
 flutter {
     source = "../.."
+}
+
+dependencies {
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.2.2'
 }

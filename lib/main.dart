@@ -1,9 +1,8 @@
-
+import 'package:store1/HomeScreen.dart';
 import 'package:store1/SignInScreen.dart';
 import 'package:flutter/material.dart';
-
+import 'SignInScreen.dart';
 import 'HomeScreen.dart';
-
 
 
 void main() {
@@ -21,8 +20,8 @@ class MyApp extends StatelessWidget {
         primaryColor: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home:SignInScreen(),
-      //HomeScreen(addToCart: (CartItem ) {  }, user: {}, phoneNumber: '', ),
+      home:
+      HomeScreen(addToCart: (CartItem ) {  }, user: {}, phoneNumber: '', ),
       debugShowCheckedModeBanner: false,
     );
   }
