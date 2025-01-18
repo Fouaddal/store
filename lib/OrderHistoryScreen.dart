@@ -63,11 +63,13 @@ class OrderDetailsScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Order Details',
+        title: Text(
+          'Order Details',
           style: TextStyle(
-          color: Colors.white,
-          fontFamily: 'Merriweather',
-        ),),
+            color: Colors.white,
+            fontFamily: 'Merriweather',
+          ),
+        ),
         backgroundColor: Colors.blue,
       ),
       body: Padding(
@@ -77,13 +79,12 @@ class OrderDetailsScreen extends StatelessWidget {
           children: [
             Text(
               'Order Date: $date',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold,fontFamily:'Merriweather' ),
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, fontFamily: 'Merriweather'),
             ),
             SizedBox(height: 10),
-
             Text(
               'Items:',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold,fontFamily:'Merriweather'),
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, fontFamily: 'Merriweather'),
             ),
             Expanded(
               child: items.isNotEmpty
@@ -105,8 +106,6 @@ class OrderDetailsScreen extends StatelessWidget {
                 child: Text('No items in this order.'),
               ),
             ),
-
-            // Display total amount
             SizedBox(height: 10),
             Text(
               'Total: \$${total.toStringAsFixed(2)}',

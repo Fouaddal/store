@@ -99,15 +99,15 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                       color: Colors.white),
                 ),
               ),
-              Tab(
-                child: Text(
-                  'Stores',
-                  style: TextStyle(
-                      fontSize: 18,
-                      fontFamily: 'Merriweather',
-                      color: Colors.white),
-                ),
-              ),
+              // Tab(
+              //   child: Text(
+              //     'Stores',
+              //     style: TextStyle(
+              //         fontSize: 18,
+              //         fontFamily: 'Merriweather',
+              //         color: Colors.white),
+              //   ),
+              // ),
             ],
           ),
         );

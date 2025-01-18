@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'AccountScreen.dart'; // Make sure to import AccountScreen
 import 'HomeScreen.dart';
 import 'SignUp.dart';
 
@@ -48,6 +47,7 @@ class _SignInScreenState extends State<SignInScreen> {
     }
   }
 
+
   Future<void> verifyOtp() async {
     try {
       final response = await http.post(
@@ -61,32 +61,17 @@ class _SignInScreenState extends State<SignInScreen> {
       if (response.statusCode == 200) {
         final jsonResponse = json.decode(response.body);
         print('OTP verified successfully: ${jsonResponse['message']}');
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: Text('Verification Successful'),
-              content: Text('Please go to your account and put your information.'),
-              actions: <Widget>[
-                TextButton(
-                  child: Text('OK'),
-                  onPressed: () {
-                    Navigator.of(context).pop(); // Close the dialog
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => AccountScreen(
-                          user: {
-                            'phone_number': phoneNumber,
-                          },
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ],
-            );
-          },
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => HomeScreen(
+              phoneNumber: phoneNumber,
+              addToCart: (item) {},
+              user: {
+                'phone_number': phoneNumber,
+              },
+            ),
+          ),
         );
       } else {
         print('Failed to verify OTP: ${response.statusCode} - ${response.body}');
@@ -101,7 +86,6 @@ class _SignInScreenState extends State<SignInScreen> {
       );
     }
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -113,12 +97,12 @@ class _SignInScreenState extends State<SignInScreen> {
           'Welcome Back',
           style: TextStyle(
             color: Colors.white,
-            fontFamily: 'Merriweather',
+            fontFamily: 'Merriweather' ,
             fontSize: 30,
-          ),
+          ) ,
         ),
       ),
-      body: Padding(
+      body:  Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -134,7 +118,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 fontSize: 15,
               ),
             ),
-            SizedBox(height: 20.0),
+            SizedBox(height: 20.0,),
             TextField(
               onChanged: (value) {
                 setState(() {
@@ -145,14 +129,16 @@ class _SignInScreenState extends State<SignInScreen> {
                 hintText: 'Phone Number',
                 hintStyle: TextStyle(
                   color: Colors.black,
-                  fontFamily: 'Merriweather',
+                  fontFamily: 'Merriweather' ,
                   fontSize: 20,
                 ),
-                prefixIcon: Icon(Icons.phone, color: Colors.blue),
+                prefixIcon: Icon(Icons.phone,color: Colors.blue),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
+
                 ),
               ),
+
               keyboardType: TextInputType.phone,
             ),
             SizedBox(height: 16.0),
@@ -167,7 +153,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   hintText: 'OTP',
                   hintStyle: TextStyle(
                     color: Colors.black,
-                    fontFamily: 'Merriweather',
+                    fontFamily: 'Merriweather' ,
                     fontSize: 20,
                   ),
                   prefixIcon: Icon(
@@ -178,12 +164,13 @@ class _SignInScreenState extends State<SignInScreen> {
                     borderRadius: BorderRadius.circular(10.0),
                   ),
                 ),
+
                 keyboardType: TextInputType.number,
               ),
             SizedBox(height: 16.0),
             ElevatedButton(
               onPressed: codeSent ? verifyOtp : sendSms,
-              child: Text(codeSent ? 'Verify OTP' : 'Send SMS'),
+              child: Text(codeSent ? 'Verify OTP  ' : 'Send SMS'),
               style: ElevatedButton.styleFrom(
                 foregroundColor: Colors.white,
                 backgroundColor: Colors.blue,
@@ -193,24 +180,27 @@ class _SignInScreenState extends State<SignInScreen> {
                 ),
               ),
             ),
+
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text('Don\'t have an account?'),
                 TextButton(
-                  onPressed: () {
+                  onPressed: (){
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => SignUpScreen()),
+                      MaterialPageRoute(builder: (context)=>SignUpScreen()),
                     );
                   },
-                  child: Text('Sign Up'),
+                  child: Text('Sing Up') ,
                 )
               ],
             ),
+
           ],
         ),
       ),
     );
+
   }
 }

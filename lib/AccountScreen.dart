@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'HomeScreen.dart';
 import 'SignInScreen.dart';
 import 'User.dart';
-//import 'package:image_picker/image_picker.dart';
+import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
 
@@ -67,11 +66,12 @@ class _AccountScreenState extends State<AccountScreen> {
         setState(() {
           _isEditing = false;
         });
-        // Navigate to HomeScreen
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => HomeScreen(addToCart: (CartItem ) {  }, user: {}, phoneNumber: '',)),
-        );
+        // Update the text controllers with saved data
+        setState(() {
+          _firstNameController.text = user.firstName;
+          _lastNameController.text = user.lastName;
+          _emailController.text = user.email;
+        });
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Failed to save user data: ${response.statusCode}')),
@@ -84,14 +84,13 @@ class _AccountScreenState extends State<AccountScreen> {
     }
   }
 
-
   void _editData() {
     setState(() {
       _isEditing = true;
     });
   }
 
- /* File? image; // Variable to store the selected image
+  File? image; // Variable to store the selected image
   Future<void> pickImageFromGallery() async {
     try {
       final pickedImage = await ImagePicker().pickImage(source: ImageSource.gallery);
@@ -103,7 +102,7 @@ class _AccountScreenState extends State<AccountScreen> {
     } catch (e) {
       print('Failed to pick image: $e'); // Error handling
     }
-  }*/
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -132,17 +131,17 @@ class _AccountScreenState extends State<AccountScreen> {
         padding: const EdgeInsets.all(16.0),
         children: <Widget>[
           Center(
-          /*  child: Container(
+            child: Container(
               height: 100.0,
               width: 100.0,
               child: FloatingActionButton(onPressed: pickImageFromGallery,
                 child:image != null
                     ? ClipOval(child: Image.file(image!, height: double.infinity, width: double.infinity, fit: BoxFit.cover))
-                :Icon(Icons.add_a_photo,color: Colors.blue),
+                    :Icon(Icons.add_a_photo,color: Colors.blue),
                 backgroundColor: image !=null ? Colors.transparent:Colors.white,
                 shape: CircleBorder() ,
               ),
-            ),*/
+            ),
           ),
           SizedBox(height: 16.0),
           if (widget.user?['phone_number'] != null)
